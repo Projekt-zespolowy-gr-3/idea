@@ -54,17 +54,12 @@ public class AccountServiceImpl implements AccountService {
         client.setActive(true);
         client.setAccessLevel("CLIENT");
 
-        Manager manager = new Manager();
-        manager.setAccount(account);
-        manager.setActive(false);
-        manager.setAccessLevel("MANAGER");
-
         Admin admin = new Admin();
         admin.setAccount(account);
         admin.setActive(false);
         admin.setAccessLevel("ADMIN");
 
-        return Arrays.asList(client, manager, admin);
+        return Arrays.asList(client, admin);
     }
 
     @Override

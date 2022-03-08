@@ -9,7 +9,6 @@ import pl.dmcs.idea.dto.AccountDTO;
 import pl.dmcs.idea.exceptions.AppBaseException;
 import pl.dmcs.idea.services.AccountService;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @CrossOrigin
@@ -23,7 +22,7 @@ public class AccountController {
     private BCryptPasswordEncoder passwordEncoder;
 
     @PostMapping("/register/{captcha}")
-    public ResponseEntity<?> register(@Valid @RequestBody AccountDTO accountDTO, HttpServletRequest request) {
+    public ResponseEntity<?> register(@Valid @RequestBody AccountDTO accountDTO) {
         try {
             accountDTO.setPassword(passwordEncoder.encode(accountDTO.getPassword()));
             String token = accountService.register(accountDTO);
