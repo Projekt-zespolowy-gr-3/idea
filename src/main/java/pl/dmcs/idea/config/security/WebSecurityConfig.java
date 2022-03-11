@@ -21,7 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final String[] PUBLIC_PATHS = new String[]{"/idea/login", "/idea/register/**", "/idea/confirm/**"};
+    private final String[] PUBLIC_PATHS = new String[]{"/idea/login", "/idea/register/**", "/idea/confirm/**", "/idea/furnitures"};
 
     @Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;

@@ -26,6 +26,8 @@ public class Furniture {
 
     private String description;
 
+    private String category;
+
     private BigDecimal price;
 
     private byte[] photo;

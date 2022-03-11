@@ -7,6 +7,7 @@ import pl.dmcs.idea.dto.FurnitureDTO;
 import pl.dmcs.idea.exceptions.AppBaseException;
 import pl.dmcs.idea.services.FurnitureService;
 
+@CrossOrigin
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("furnitures")
@@ -32,7 +33,7 @@ public class FurnitureController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/furniture")
     public ResponseEntity<?> addFurniture(@RequestBody FurnitureDTO furnitureDTO) {
         try {
             furnitureService.addFurniture(furnitureDTO);
