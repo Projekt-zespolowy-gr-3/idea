@@ -21,12 +21,12 @@ public class AccountController {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    @PostMapping("/register/{captcha}")
+    @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody AccountDTO accountDTO) {
         try {
             accountDTO.setPassword(passwordEncoder.encode(accountDTO.getPassword()));
             String token = accountService.register(accountDTO);
-            return ResponseEntity.ok("registration.success");
+            return ResponseEntity.ok().build();
         } catch (AppBaseException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {

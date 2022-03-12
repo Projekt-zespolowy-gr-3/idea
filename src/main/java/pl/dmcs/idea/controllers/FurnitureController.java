@@ -1,12 +1,14 @@
 package pl.dmcs.idea.controllers;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.dmcs.idea.dto.FurnitureDTO;
 import pl.dmcs.idea.exceptions.AppBaseException;
 import pl.dmcs.idea.services.FurnitureService;
 
+@Slf4j
 @CrossOrigin
 @RestController
 @RequiredArgsConstructor
