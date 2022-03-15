@@ -2,6 +2,7 @@ package pl.dmcs.idea.dto.mappers;
 
 import org.springframework.util.Base64Utils;
 import pl.dmcs.idea.dto.FurnitureDTO;
+import pl.dmcs.idea.entities.Category;
 import pl.dmcs.idea.entities.Furniture;
 
 public class FurnitureMapper {
@@ -11,7 +12,7 @@ public class FurnitureMapper {
                 .businessKey(furniture.getBusinessKey())
                 .name(furniture.getName())
                 .description(furniture.getDescription())
-                .category(furniture.getCategory())
+                .category(furniture.getCategory().label)
                 .price(furniture.getPrice())
                 .amount(furniture.getAmount())
                 .photo(furniture.getPhoto() != null ? new String(Base64Utils.encode(furniture.getPhoto())) : "")
@@ -22,7 +23,7 @@ public class FurnitureMapper {
         return Furniture.builder()
                 .name(furnitureDTO.getName())
                 .description(furnitureDTO.getDescription())
-                .category(furnitureDTO.getCategory())
+                .category(Category.valueOfLabel(furnitureDTO.getCategory()))
                 .price(furnitureDTO.getPrice())
                 .amount(furnitureDTO.getAmount())
                 .photo(furnitureDTO.getPhoto() != null ? Base64Utils.decode(furnitureDTO.getPhoto().getBytes()) : null)

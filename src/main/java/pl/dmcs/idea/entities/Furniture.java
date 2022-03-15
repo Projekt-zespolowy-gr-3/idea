@@ -26,7 +26,8 @@ public class Furniture {
 
     private String description;
 
-    private String category;
+    @Enumerated(EnumType.STRING)
+    private Category category;
 
     private BigDecimal price;
 

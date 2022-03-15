@@ -5,8 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.dmcs.idea.dto.FurnitureDTO;
+import pl.dmcs.idea.entities.Category;
 import pl.dmcs.idea.exceptions.AppBaseException;
 import pl.dmcs.idea.services.FurnitureService;
+
+import java.util.Set;
 
 @Slf4j
 @CrossOrigin
@@ -54,5 +57,10 @@ public class FurnitureController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("unexpected.error");
         }
+    }
+
+    @GetMapping("/categories")
+    public Set<String> getCategories() {
+        return Category.labels();
     }
 }
