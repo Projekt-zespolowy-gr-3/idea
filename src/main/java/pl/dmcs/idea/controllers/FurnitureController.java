@@ -26,6 +26,15 @@ public class FurnitureController {
         }
     }
 
+    @GetMapping(params = {"page", "size"})
+    public ResponseEntity<?> getFurnituresPagination(@RequestParam(value = "page", defaultValue = "0") Integer page, @RequestParam(value = "size", defaultValue = "5") Integer size) {
+        try {
+            return ResponseEntity.ok().body(furnitureService.getFurnitersPagination(page, size));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("unexpected.error");
+        }
+    }
+
     @GetMapping("/key")
     public ResponseEntity<?> getFurniture(String businessKey) {
         try {
