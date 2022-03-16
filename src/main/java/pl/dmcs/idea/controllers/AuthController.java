@@ -34,10 +34,13 @@ public class AuthController {
                     jwtRequest.getLogin(), jwtRequest.getPassword()
             ));
         } catch (BadCredentialsException e) {
+            log.error("Handled exception", e);
             return ResponseEntity.badRequest().body("credentials.error");
         } catch (LockedException | DisabledException e) {
+            log.error("Handled exception", e);
             return ResponseEntity.badRequest().body("account.disabled.error");
         } catch (AuthenticationException e) {
+            log.error("Handled exception", e);
             return ResponseEntity.badRequest().body("unexpected.error");
         }
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
