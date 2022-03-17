@@ -1,7 +1,6 @@
 package pl.dmcs.idea.controllers;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import pl.dmcs.idea.dto.FurnitureDTO;
 import pl.dmcs.idea.dto.PaginationFurnitureDTO;
@@ -12,7 +11,6 @@ import pl.dmcs.idea.services.FurnitureService;
 import java.util.List;
 import java.util.Set;
 
-@Slf4j
 @CrossOrigin
 @RestController
 @RequiredArgsConstructor
