@@ -30,6 +30,7 @@ public class FurnitureController {
         return furnitureService.getFurnitersPagination(page, size);
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/{businessKey}")
     public FurnitureDTO getFurniture(@PathVariable String businessKey) throws AppBaseException {
         return furnitureService.getFurniture(businessKey);
