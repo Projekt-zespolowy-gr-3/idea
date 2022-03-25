@@ -1,6 +1,7 @@
 package pl.dmcs.idea.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pl.dmcs.idea.dto.OrderDTO;
 import pl.dmcs.idea.exceptions.AppBaseException;
@@ -33,6 +34,7 @@ public class OrderController {
     }
 
     @GetMapping("/{username}")
+    @PreAuthorize("#username == authentication.principal.username")
     public List<OrderDTO> getOrdersForClient(@PathVariable String username) throws AppBaseException {
         return orderService.getOrdersForClient(username);
     }
