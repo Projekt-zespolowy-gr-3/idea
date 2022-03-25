@@ -1,14 +1,18 @@
 package pl.dmcs.idea.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import pl.dmcs.idea.dto.CartFurnitureDTO;
 import pl.dmcs.idea.dto.FurnitureDTO;
 import pl.dmcs.idea.dto.OrderDTO;
+import pl.dmcs.idea.dto.mappers.FurnitureMapper;
 import pl.dmcs.idea.dto.mappers.OrderMapper;
 import pl.dmcs.idea.entities.Client;
 import pl.dmcs.idea.entities.Furniture;
 import pl.dmcs.idea.entities.Order;
+import pl.dmcs.idea.entities.OrderFurniture;
 import pl.dmcs.idea.exceptions.AppBaseException;
 import pl.dmcs.idea.repositories.AccessLevelRepository;
 import pl.dmcs.idea.repositories.FurnitureRepository;
@@ -33,14 +37,18 @@ public class OrderServiceImpl implements OrderService {
             Order order = new Order();
             order.setBusinessKey(UUID.randomUUID().toString());
 
-            order.setClient((Client) accessLevelRepository.findByAccountLogin(orderDTO.getUsername()).orElseThrow(AppBaseException::new));
-
-            List<Furniture> furnitures = new ArrayList<>();
-            for(String key : orderDTO.getFurnitures().stream().map(FurnitureDTO::getBusinessKey).toList())
-                furnitures.add(furnitureRepository.findByBusinessKey(key).orElseThrow(AppBaseException::new));
-            order.setFurnitures(furnitures);
-
-            orderRepository.saveAndFlush(order);
+            order.setClient((Client) accessLevelRepository.findFirstByAccountLogin(orderDTO.getUsername()).orElseThrow(() -> new AppBaseException("user.not.found.error")));
+                for(CartFurnitureDTO cartFurnitureDTO : orderDTO.getFurnitures()){
+                    Furniture furniture = furnitureRepository.findByBusinessKeyAndAmountGreaterThanEqual(cartFurnitureDTO.getId(), cartFurnitureDTO.getQuantity()).orElseThrow(() -> new AppBaseException("furniture.stock.insufficient"));
+                    furniture.setAmount(furniture.getAmount() - cartFurnitureDTO.getQuantity());
+                    OrderFurniture orderFurniture = new OrderFurniture();
+                    orderFurniture.setOrder(order);
+                    orderFurniture.setFurniture(furniture);
+                    orderFurniture.setQuantity(cartFurnitureDTO.getQuantity());
+                    order.getOrderFurnitureList().add(orderFurniture);
+                    furnitureRepository.save(furniture);
+                }
+                orderRepository.saveAndFlush(order);
         } catch (DataAccessException e) {
             throw new AppBaseException("unexpected.error");
         }
@@ -49,7 +57,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderDTO> getOrders() throws AppBaseException {
         try {
-            return orderRepository.findAll().stream().map(OrderMapper::mapToDto).toList();
+            List<Order> orders = orderRepository.findAll().stream().toList();
+            return getOrderDtos(orders);
         } catch (DataAccessException e) {
             throw new AppBaseException("unexpected.error");
         }
@@ -68,9 +77,24 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderDTO> getOrdersForClient(String username) throws AppBaseException {
         try {
-            return orderRepository.findAllByClientAccountLogin(username).stream().map(OrderMapper::mapToDto).toList();
+            List<Order> orders = orderRepository.findAllByClientAccountLogin(username).stream().toList();
+            return getOrderDtos(orders);
         } catch (DataAccessException e) {
             throw new AppBaseException("unexpected.error");
         }
+    }
+
+    List<OrderDTO> getOrderDtos(List<Order> orders){
+            List<OrderDTO> orderDtos = new ArrayList<>();
+            for(Order order : orders){
+                OrderDTO orderDTO = OrderMapper.mapToDto(order);
+                for(OrderFurniture orderFurniture : order.getOrderFurnitureList()){
+                    FurnitureDTO furnitureDTO = FurnitureMapper.mapToDto(orderFurniture.getFurniture());
+                    furnitureDTO.setCartQuantity(orderFurniture.getQuantity());
+                    orderDTO.getFurnitureObjects().add(furnitureDTO);
+                }
+                orderDtos.add(orderDTO);
+            }
+            return orderDtos;
     }
 }

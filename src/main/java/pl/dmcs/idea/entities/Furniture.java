@@ -6,6 +6,8 @@ import pl.dmcs.idea.config.DbNamesConfig;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -34,4 +36,7 @@ public class Furniture {
     private byte[] photo;
 
     private int amount;
+
+    @OneToMany(mappedBy = "furniture")
+    private List<OrderFurniture> orderFurnitureList = new ArrayList<>();
 }

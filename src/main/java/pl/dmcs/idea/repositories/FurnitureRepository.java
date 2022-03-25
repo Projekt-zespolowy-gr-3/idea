@@ -10,5 +10,6 @@ import java.util.Optional;
 public interface FurnitureRepository extends JpaRepository<Furniture, Long> {
     Page<Furniture> findAll(Pageable pageable);
 
+    Optional<Furniture> findByBusinessKeyAndAmountGreaterThanEqual(String businessKey, int quantity);
     Optional<Furniture> findByBusinessKey(String businessKey);
 }

@@ -7,5 +7,6 @@ public class DbNamesConfig {
     public static final String ACCESS_LEVEL_TABLE = "access_level";
 
     public static final String FURNITURE_TABLE = "furniture";
+    public static final String ORDER_FURNITURE_TABLE = "order_furniture";
     public static final String ORDER_TABLE = "order";
 }

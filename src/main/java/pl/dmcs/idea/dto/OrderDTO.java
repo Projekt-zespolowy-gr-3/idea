@@ -14,6 +14,7 @@ import java.util.List;
 public class OrderDTO {
 
     private String businessKey;
-    private List<FurnitureDTO> furnitures;
+    private List<CartFurnitureDTO> furnitures;
+    private List<FurnitureDTO> furnitureObjects;
     private String username;
 }

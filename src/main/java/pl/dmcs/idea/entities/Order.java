@@ -23,8 +23,8 @@ public class Order {
 
     private String businessKey;
 
-    @OneToMany
-    private List<Furniture> furnitures = new ArrayList<>();
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<OrderFurniture> orderFurnitureList = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "client_id")
