@@ -9,7 +9,8 @@ public enum Category {
     BED("category.bed"),
     SOFA("category.sofa"),
     TABLE("category.table"),
-    CHAIR("category.chair");
+    CHAIR("category.chair"),
+    OTHER("category.other");
 
     private static final Map<String, Category> BY_LABEL = new HashMap<>();
 
