@@ -1,11 +1,9 @@
 package pl.dmcs.idea.dto.mappers;
 
-import pl.dmcs.idea.dto.CartFurnitureDTO;
-import pl.dmcs.idea.dto.FurnitureDTO;
 import pl.dmcs.idea.dto.OrderDTO;
 import pl.dmcs.idea.entities.Order;
+import pl.dmcs.idea.utils.DateFormatter;
 
-import java.util.stream.Collectors;
 
 public class OrderMapper {
 
@@ -13,6 +11,8 @@ public class OrderMapper {
         return OrderDTO.builder()
                 .businessKey(order.getBusinessKey())
                 .username(order.getClient().getAccount().getLogin())
+                .furnitureObjects(order.getOrderFurnitureList().stream().map(f -> FurnitureMapper.mapToDto(f.getFurniture())).toList())
+                .date(DateFormatter.dateToString(order.getDate()))
                 .build();
     }
 }

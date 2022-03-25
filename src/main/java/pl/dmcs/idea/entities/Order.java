@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import pl.dmcs.idea.config.DbNamesConfig;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,10 +24,12 @@ public class Order {
 
     private String businessKey;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<OrderFurniture> orderFurnitureList = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "client_id")
     private Client client;
+
+    private LocalDateTime date;
 }

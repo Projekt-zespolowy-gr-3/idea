@@ -19,6 +19,7 @@ import pl.dmcs.idea.repositories.FurnitureRepository;
 import pl.dmcs.idea.repositories.OrderRepository;
 import pl.dmcs.idea.services.OrderService;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -36,6 +37,7 @@ public class OrderServiceImpl implements OrderService {
         try {
             Order order = new Order();
             order.setBusinessKey(UUID.randomUUID().toString());
+            order.setDate(LocalDateTime.now());
 
             order.setClient((Client) accessLevelRepository.findFirstByAccountLogin(orderDTO.getUsername()).orElseThrow(() -> new AppBaseException("user.not.found.error")));
                 for(CartFurnitureDTO cartFurnitureDTO : orderDTO.getFurnitures()){
@@ -91,7 +93,8 @@ public class OrderServiceImpl implements OrderService {
                 for(OrderFurniture orderFurniture : order.getOrderFurnitureList()){
                     FurnitureDTO furnitureDTO = FurnitureMapper.mapToDto(orderFurniture.getFurniture());
                     furnitureDTO.setCartQuantity(orderFurniture.getQuantity());
-                    orderDTO.getFurnitureObjects().add(furnitureDTO);
+                    List<FurnitureDTO> list = new ArrayList<>(orderDTO.getFurnitureObjects());
+                    list.add(furnitureDTO);
                 }
                 orderDtos.add(orderDTO);
             }

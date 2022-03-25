@@ -17,4 +17,5 @@ public class OrderDTO {
     private List<CartFurnitureDTO> furnitures;
     private List<FurnitureDTO> furnitureObjects;
     private String username;
+    private String date;
 }
