@@ -31,6 +31,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final FurnitureRepository furnitureRepository;
     private final AccessLevelRepository accessLevelRepository;
+    private final static String ACCESS_LEVEL_CLIENT = "CLIENT";
 
     @Override
     public void addOrder(OrderDTO orderDTO) throws AppBaseException {
@@ -39,7 +40,7 @@ public class OrderServiceImpl implements OrderService {
             order.setBusinessKey(UUID.randomUUID().toString());
             order.setDate(LocalDateTime.now());
 
-            order.setClient((Client) accessLevelRepository.findFirstByAccountLogin(orderDTO.getUsername()).orElseThrow(() -> new AppBaseException("user.not.found.error")));
+            order.setClient((Client) accessLevelRepository.findFirstByAccountLoginAndAccessLevel(orderDTO.getUsername(),ACCESS_LEVEL_CLIENT).orElseThrow(() -> new AppBaseException("user.not.found.error")));
                 for(CartFurnitureDTO cartFurnitureDTO : orderDTO.getFurnitures()){
                     Furniture furniture = furnitureRepository.findByBusinessKeyAndAmountGreaterThanEqual(cartFurnitureDTO.getId(), cartFurnitureDTO.getQuantity()).orElseThrow(() -> new AppBaseException("furniture.stock.insufficient"));
                     furniture.setAmount(furniture.getAmount() - cartFurnitureDTO.getQuantity());

@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface AccessLevelRepository extends JpaRepository<AccessLevel, Long> {
 
-    Optional<AccessLevel> findFirstByAccountLogin(String login);
+    Optional<AccessLevel> findFirstByAccountLoginAndAccessLevel(String login, String accessLevel);
 
 }
