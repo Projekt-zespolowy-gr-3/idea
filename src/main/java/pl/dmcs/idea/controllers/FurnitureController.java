@@ -24,10 +24,11 @@ public class FurnitureController {
         return furnitureService.getFurnitures();
     }
 
-    @GetMapping(params = {"page", "size"})
+    @GetMapping(params = {"page", "size", "query"})
     public PaginationFurnitureDTO getFurnituresPagination(@RequestParam(value = "page", defaultValue = "0") Integer page,
-                                                          @RequestParam(value = "size", defaultValue = "5") Integer size) throws AppBaseException {
-        return furnitureService.getFurnitersPagination(page, size);
+                                                          @RequestParam(value = "size", defaultValue = "5") Integer size,
+                                                          @RequestParam(value = "query", defaultValue = "") String query) throws AppBaseException {
+        return furnitureService.getFurnitersPagination(query, page, size);
     }
 
     @CrossOrigin(origins = "http://localhost:3000")

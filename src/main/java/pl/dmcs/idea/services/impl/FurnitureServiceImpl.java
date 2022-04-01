@@ -5,6 +5,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.dmcs.idea.dto.FurnitureDTO;
 import pl.dmcs.idea.dto.PaginationFurnitureDTO;
 import pl.dmcs.idea.dto.mappers.FurnitureMapper;
@@ -14,21 +15,27 @@ import pl.dmcs.idea.repositories.FurnitureRepository;
 import pl.dmcs.idea.services.FurnitureService;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class FurnitureServiceImpl implements FurnitureService {
 
     private final FurnitureRepository furnitureRepository;
 
     @Override
-    public PaginationFurnitureDTO getFurnitersPagination(Integer page, Integer pageSize) throws AppBaseException {
+    public PaginationFurnitureDTO getFurnitersPagination(String query, Integer page, Integer pageSize) throws AppBaseException {
         try {
             Pageable paging = PageRequest.of(page, pageSize);
             PaginationFurnitureDTO paginationFurnitureDTO = new PaginationFurnitureDTO();
-            paginationFurnitureDTO.setFurnitureList(furnitureRepository.findAll(paging).stream().map(FurnitureMapper::mapToDto).collect(Collectors.toList()));
+            if (Objects.equals(query, "")) {
+                paginationFurnitureDTO.setFurnitureList(furnitureRepository.findAll(paging).stream().map(FurnitureMapper::mapToDto).collect(Collectors.toList()));
+            } else {
+                paginationFurnitureDTO.setFurnitureList(furnitureRepository.search(query, paging).stream().map(FurnitureMapper::mapToDto).collect(Collectors.toList()));
+            }
             paginationFurnitureDTO.setTotalRows(furnitureRepository.findAll(paging).getTotalElements());
             return paginationFurnitureDTO;
         } catch (DataAccessException e) {

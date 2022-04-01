@@ -1,7 +1,10 @@
 package pl.dmcs.idea.entities;
 
-import lombok.*;
 import lombok.AccessLevel;
+import lombok.*;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.ScaledNumberField;
 import pl.dmcs.idea.config.DbNamesConfig;
 
 import javax.persistence.*;
@@ -11,6 +14,7 @@ import java.util.List;
 
 @Data
 @Entity
+@Indexed
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,13 +28,16 @@ public class Furniture {
 
     private String businessKey;
 
+    @FullTextField
     private String name;
 
+    @FullTextField
     private String description;
 
     @Enumerated(EnumType.STRING)
     private Category category;
 
+    @ScaledNumberField
     private BigDecimal price;
 
     private byte[] photo;

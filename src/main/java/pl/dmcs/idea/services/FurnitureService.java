@@ -12,7 +12,7 @@ public interface FurnitureService {
 
     List<FurnitureDTO> getFurnitures() throws AppBaseException;
 
-    PaginationFurnitureDTO getFurnitersPagination(Integer page, Integer pageSize) throws AppBaseException;
+    PaginationFurnitureDTO getFurnitersPagination(String query, Integer page, Integer pageSize) throws AppBaseException;
 
     FurnitureDTO getFurniture(String businessKey) throws AppBaseException;
 }
