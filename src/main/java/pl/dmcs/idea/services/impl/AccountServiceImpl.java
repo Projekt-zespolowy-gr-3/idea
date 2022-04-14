@@ -100,4 +100,28 @@ public class AccountServiceImpl implements AccountService {
             throw new AppBaseException("unexpected.error");
         }
     }
+
+    @Override
+    public AccountDTO getUserByEmail(String email) throws AppBaseException {
+        try {
+            return AccountMapper.mapToDto(accountRepository.findByEmail(email)
+                    .orElseThrow(() -> new AppBaseException("unexpected.error")));
+        } catch (DataAccessException e) {
+            throw new AppBaseException("unexpected.error");
+        }
+    }
+
+    @Override
+    public void changeResetPassword(String token, AccountDTO accountDTO) throws AppBaseException {
+        try {
+            Account account = accountRepository.findByToken(token)
+                    .orElseThrow(() -> new AppBaseException("unexpected.error"));
+            if(!account.getToken().equals(token))
+                throw new AppBaseException("unexpected.error");
+            account.setPassword(accountDTO.getPassword());
+            accountRepository.saveAndFlush(account);
+        } catch (DataAccessException e) {
+            throw new AppBaseException("unexpected.error");
+        }
+    }
 }

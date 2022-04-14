@@ -15,6 +15,7 @@ public class AccountMapper {
                 .name(account.getFirstname())
                 .surname(account.getLastname())
                 .email(account.getEmail())
+                .token(account.getToken())
                 .accessLevels(account.getAccessLevels().stream().filter(AccessLevel::isActive).map(AccessLevel::getAccessLevel).collect(Collectors.toList()))
                 .build();
     }

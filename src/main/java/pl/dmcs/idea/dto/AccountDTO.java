@@ -33,5 +33,6 @@ public class AccountDTO {
     @Pattern(regexp = "[a-zA-Z0-9_]+@[a-zA-Z0-9]+\\.[a-zA-Z]{2,}")
     private String email;
     private boolean active;
+    private String token;
     private List<String> accessLevels;
 }

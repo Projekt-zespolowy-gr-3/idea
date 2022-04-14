@@ -14,4 +14,6 @@ public interface AccountService {
     void confirm(String token) throws AppBaseException;
     void changeRole(String login, String role) throws AppBaseException;
     AccountDTO getUser(String login) throws AppBaseException;
+    AccountDTO getUserByEmail(String email) throws AppBaseException;
+    void changeResetPassword(String token, AccountDTO accountDTO) throws AppBaseException;
 }

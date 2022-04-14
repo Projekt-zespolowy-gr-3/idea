@@ -56,4 +56,18 @@ public class AccountController {
     public AccountDTO getUser(@PathVariable String login) throws AppBaseException {
         return accountService.getUser(login);
     }
+
+    @PostMapping("/reset/{email}")
+    public ResponseEntity<?> resetPassword(@PathVariable String email, HttpServletRequest request) throws AppBaseException, MessagingException {
+        AccountDTO account = accountService.getUserByEmail(email);
+        emailService.sendPasswordResetMail(account.getEmail(), account.getToken(), request.getRequestURL().toString(), request.getServletPath());
+        return ResponseEntity.ok("reset.success");
+    }
+
+    @PostMapping("/changeResetPassword/{token}")
+    public ResponseEntity<?> changeResetPassword(@PathVariable String token, @RequestBody AccountDTO accountDTO) throws AppBaseException {
+        accountDTO.setPassword(passwordEncoder.encode(accountDTO.getPassword()));
+        accountService.changeResetPassword(token, accountDTO);
+        return ResponseEntity.ok("change.reset.success");
+    }
 }
