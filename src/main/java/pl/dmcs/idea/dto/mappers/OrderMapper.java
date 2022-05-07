@@ -11,7 +11,7 @@ public class OrderMapper {
         return OrderDTO.builder()
                 .businessKey(order.getBusinessKey())
                 .username(order.getClient().getAccount().getLogin())
-//                .furnitureObjects(order.getOrderFurnitureList().stream().map(f -> FurnitureMapper.mapToDto(f.getFurniture())).toList())
+                .furnitureObjects(order.getOrderFurnitureList().stream().map(f -> FurnitureMapper.mapToDto(f.getFurniture())).toList())
                 .date(DateFormatter.dateToString(order.getDate()))
                 .build();
     }

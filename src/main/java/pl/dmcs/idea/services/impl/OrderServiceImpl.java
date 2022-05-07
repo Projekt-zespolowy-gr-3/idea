@@ -73,6 +73,7 @@ public class OrderServiceImpl implements OrderService {
             Order order = orderRepository.findByBusinessKey(key)
                     .orElseThrow(() -> new AppBaseException("order.not.found"));
             OrderDTO orderDTO = OrderMapper.mapToDto(order);
+            orderDTO.setFurnitureObjects(new ArrayList<>());
             for(OrderFurniture orderFurniture : order.getOrderFurnitureList()) {
                 FurnitureDTO furnitureDTO = FurnitureMapper.mapToDto(orderFurniture.getFurniture());
                 furnitureDTO.setCartQuantity(orderFurniture.getQuantity());
@@ -107,11 +108,11 @@ public class OrderServiceImpl implements OrderService {
             List<OrderDTO> orderDtos = new ArrayList<>();
             for(Order order : orders){
                 OrderDTO orderDTO = OrderMapper.mapToDto(order);
+                orderDTO.setFurnitureObjects(new ArrayList<>());
                 for(OrderFurniture orderFurniture : order.getOrderFurnitureList()){
                     FurnitureDTO furnitureDTO = FurnitureMapper.mapToDto(orderFurniture.getFurniture());
                     furnitureDTO.setCartQuantity(orderFurniture.getQuantity());
-                    List<FurnitureDTO> list = new ArrayList<>(orderDTO.getFurnitureObjects());
-                    list.add(furnitureDTO);
+                    orderDTO.getFurnitureObjects().add(furnitureDTO);
                 }
                 orderDTO.setTotalPrice(getTotalPrice(orderDTO));
                 orderDtos.add(orderDTO);

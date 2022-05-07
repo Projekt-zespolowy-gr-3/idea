@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -15,7 +16,7 @@ public class OrderDTO {
 
     private String businessKey;
     private List<CartFurnitureDTO> furnitures;
-    private List<FurnitureDTO> furnitureObjects;
+    private List<FurnitureDTO> furnitureObjects = new ArrayList<>();
     private String username;
     private String date;
     private Double totalPrice;
