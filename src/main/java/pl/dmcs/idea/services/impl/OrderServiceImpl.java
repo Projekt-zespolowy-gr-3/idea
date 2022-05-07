@@ -70,8 +70,16 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDTO getOrder(String key) throws AppBaseException {
         try {
-            return OrderMapper.mapToDto(orderRepository.findByBusinessKey(key)
-                    .orElseThrow(() -> new AppBaseException("order.not.found")));
+            Order order = orderRepository.findByBusinessKey(key)
+                    .orElseThrow(() -> new AppBaseException("order.not.found"));
+            OrderDTO orderDTO = OrderMapper.mapToDto(order);
+            for(OrderFurniture orderFurniture : order.getOrderFurnitureList()) {
+                FurnitureDTO furnitureDTO = FurnitureMapper.mapToDto(orderFurniture.getFurniture());
+                furnitureDTO.setCartQuantity(orderFurniture.getQuantity());
+                orderDTO.getFurnitureObjects().add(furnitureDTO);
+            }
+            orderDTO.setTotalPrice(getTotalPrice(orderDTO));
+            return orderDTO;
         } catch (DataAccessException e) {
             throw new AppBaseException("unexpected.error");
         }
@@ -87,6 +95,14 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+    private Double getTotalPrice(OrderDTO orderFurnitures) {
+        Double totalPrice = 0.0;
+        for(FurnitureDTO furnitureDTO : orderFurnitures.getFurnitureObjects()) {
+            totalPrice += furnitureDTO.getPrice().doubleValue() * furnitureDTO.getCartQuantity();
+        }
+        return totalPrice;
+    }
+
     List<OrderDTO> getOrderDtos(List<Order> orders){
             List<OrderDTO> orderDtos = new ArrayList<>();
             for(Order order : orders){
@@ -97,6 +113,7 @@ public class OrderServiceImpl implements OrderService {
                     List<FurnitureDTO> list = new ArrayList<>(orderDTO.getFurnitureObjects());
                     list.add(furnitureDTO);
                 }
+                orderDTO.setTotalPrice(getTotalPrice(orderDTO));
                 orderDtos.add(orderDTO);
             }
             return orderDtos;

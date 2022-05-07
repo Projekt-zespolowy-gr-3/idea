@@ -18,4 +18,5 @@ public class OrderDTO {
     private List<FurnitureDTO> furnitureObjects;
     private String username;
     private String date;
+    private Double totalPrice;
 }
